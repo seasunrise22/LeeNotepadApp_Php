@@ -1,5 +1,4 @@
 <?php
-date_default_timezone_set('Asia/Seoul');
 $servername = "localhost";
 $username = "root";
 $password = "root";
@@ -12,17 +11,16 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-$datetime = date('Y-m-d H-i-s');
-$memotext = $_POST["text"];
+$sql = "SELECT Text FROM memo_normal";
+$result = $conn->query($sql);
 
-$sql = "INSERT INTO memo_normal (inputtime, memotext)
-VALUES ('$datetime', '$memotext')";
-
-if ($conn->query($sql) === TRUE) {
-  echo "New record created successfully";
+if ($result->num_rows > 0) {
+  // output data of each row
+  while($row = $result->fetch_assoc()) {
+    echo "Datetime: " . $row["inputtime"] . " Text: " . $row["memotext"];
+  }
 } else {
-  echo "Error: " . $sql . "<br>" . $conn->error;
+  echo "0 results";
 }
-
 $conn->close();
 ?>
